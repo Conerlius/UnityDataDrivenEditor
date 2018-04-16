@@ -36,7 +36,7 @@ namespace DataDriven
         /// <summary>
         /// 构建编辑器窗口
         /// </summary>
-        [MenuItem("Tools/DataDriven %1")]
+        [MenuItem("Tools/DataDriven #1")]
         static void CreateDataDrivenWindow() {
             if (_Instance == null) {
                 _Instance = GetWindow<DataDrivenEditor>();

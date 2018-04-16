@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
@@ -37,14 +38,27 @@ namespace DataDriven
                 if (path != null && path.Length > 0)
                 {
                     string _p = Application.dataPath.Replace("Assets", "") + path;
-                    File.CreateText(_p);
-                    //Debug.Log(Application.dataPath + path);
+                    string _name = FileUtil.GetFileName(_p);
+                    string _content = GenerateDefaultContent(_name);
+                    FileUtil.CreateTextFile(_p, _content);
                 }
                 else
                 {
                     _editor.ShowNotification(new GUIContent("用户取消操作"));
                 }
             }
+        }
+        /// <summary>
+        /// 生成默认文件内容
+        /// </summary>
+        /// <param name="fileName">文件名</param>
+        /// <returns>内容</returns>
+        public static string GenerateDefaultContent(string fileName) {
+            StringBuilder sb = new StringBuilder("// This File is auto generated! Don't modify!!!\n");
+            sb.AppendFormat("\"{0}\"\n", fileName);
+            sb.AppendLine("{");
+            sb.AppendLine("}");
+            return sb.ToString();
         }
     }
 }
