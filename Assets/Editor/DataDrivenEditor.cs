@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace DataDriven
@@ -34,6 +35,10 @@ namespace DataDriven
         /// </summary>
         private EditorStatus _status = EditorStatus.Welcome;
         /// <summary>
+        /// 基本的数据驱动
+        /// </summary>
+        private BaseAbility ability = null;
+        /// <summary>
         /// 构建编辑器窗口
         /// </summary>
         [MenuItem("Tools/DataDriven #1")]
@@ -64,7 +69,15 @@ namespace DataDriven
             }
             
         }
-
+        /// <summary>
+        /// 解析驱动内容
+        /// </summary>
+        /// <param name="content">内容</param>
+        public void ParseContent(string content)
+        {
+            ability = DataDrivenFactory.ParseConfig(content);
+        }
+        
         #region 属性获取
         /// <summary>
         /// 配置路径
