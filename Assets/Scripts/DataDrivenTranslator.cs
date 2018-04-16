@@ -61,6 +61,8 @@ namespace DataDriven
         private static void TranslateLine(string content)
         {
             string[] keyValue = content.Split(new string[] { "\"\"" }, StringSplitOptions.RemoveEmptyEntries);
+			if (keyValue.Length == 0)
+				return;
             if (keyValue.Length == 1)
             {
                 // 非key-value结构
@@ -99,11 +101,29 @@ namespace DataDriven
             switch (key)
             {
                 case DrivenPropertyConst.ABILITYNAME:
-
+					{
+						// 解析驱动对应的驱动
+						baseTranslator = CreateDrivenTranslator(value);
+					}
                     break;
                 default:
                     break;
             }
         }
+		/// <summary>
+		/// 生成相应的驱动解析器
+		/// </summary>
+		/// <param name="aname">驱动名</param>
+		/// <returns>解析器</returns>
+		public static BaseDrivenTranslator CreateDrivenTranslator(string aname) {
+			BaseDrivenTranslator _translator = null;
+			switch (aname) {
+				case DrivenConst.BASE_ABILITY:
+				default:
+					_translator = new BaseDrivenTranslator(drivenName);
+					break;
+			}
+			return _translator;
+		}
     }
 }

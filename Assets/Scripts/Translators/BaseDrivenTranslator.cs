@@ -1,11 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace DataDriven
+﻿namespace DataDriven
 {
+	/// <summary>
+	/// 基本驱动解析器
+	/// </summary>
     public class BaseDrivenTranslator
     {
+		/// <summary>
+		/// 驱动
+		/// </summary>
+		BaseAbility ability = null;
+		public BaseDrivenTranslator(string aname) {
+			if (ability == null)
+				ability = new BaseAbility();
+			ability.Name = aname;
+		}
     }
 }
