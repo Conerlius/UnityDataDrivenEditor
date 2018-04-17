@@ -127,6 +127,9 @@ namespace DataDriven
 		public static BaseDrivenTranslator CreateDrivenTranslator(string aname) {
 			BaseDrivenTranslator _translator = null;
 			switch (aname) {
+                case DrivenConst.BUILD_ABILITY:
+                    _translator = new BaseDrivenTranslator(drivenName);
+                    break;
 				case DrivenConst.BASE_ABILITY:
 				default:
 					_translator = new BaseDrivenTranslator(drivenName);

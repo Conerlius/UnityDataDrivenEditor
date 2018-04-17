@@ -73,6 +73,10 @@ namespace DataDriven
                 DDWelcome.OnGUI(this);
             }
             else if (_status == EditorStatus.Editor){
+                if (ability == null){
+                    _status = EditorStatus.Welcome;
+                    return;
+                }
                 DDEditor.OnGUI(this, ability);
             }
             
@@ -90,10 +94,19 @@ namespace DataDriven
             }
             _status = EditorStatus.Editor;
         }
-
+        /// <summary>
+        /// 切换驱动类型
+        /// </summary>
+        /// <param name="iType">目标类型</param>
         public void ChangeDrivenTypeTo(DDConfig.DrivenType iType)
         {
             ability = DataDrivenFactory.Trans(ability, "DataDriven." + System.Enum.GetName(typeof(DDConfig.DrivenType), iType));
+        }
+        /// <summary>
+        /// 保存现在对驱动的修改
+        /// </summary>
+        public void SaveAbility(){
+            
         }
         #region 属性获取
         /// <summary>
