@@ -29,6 +29,10 @@ namespace DataDriven
             /// 欢迎界面
             /// </summary>
             Welcome,
+            /// <summary>
+            /// 编辑模式
+            /// </summary>
+            Editor,
         }
         /// <summary>
         /// 当前编辑器的状态
@@ -64,8 +68,12 @@ namespace DataDriven
         /// </summary>
         private void OnGUI()
         {
-            if (_status == EditorStatus.Welcome) {
+            if (_status == EditorStatus.Welcome)
+            {
                 DDWelcome.OnGUI(this);
+            }
+            else if (_status == EditorStatus.Editor){
+                DDEditor.OnGUI(this, ability);
             }
             
         }
@@ -76,8 +84,17 @@ namespace DataDriven
         public void ParseContent(string content)
         {
             ability = DataDrivenFactory.ParseConfig(content);
+            if (ability == null) {
+                this.ShowNotification(new GUIContent("解析驱动失败!!!"));
+                return;
+            }
+            _status = EditorStatus.Editor;
         }
-        
+
+        public void ChangeDrivenTypeTo(DDConfig.DrivenType iType)
+        {
+            ability = DataDrivenFactory.Trans(ability, "DataDriven." + System.Enum.GetName(typeof(DDConfig.DrivenType), iType));
+        }
         #region 属性获取
         /// <summary>
         /// 配置路径

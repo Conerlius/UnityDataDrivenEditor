@@ -1,4 +1,6 @@
-﻿namespace DataDriven
+﻿using System;
+
+namespace DataDriven
 {
 	/// <summary>
 	/// 基本驱动解析器
@@ -14,5 +16,10 @@
 				ability = new BaseAbility();
 			ability.Name = aname;
 		}
+
+        public object GetObject()
+        {
+            return ability;
+        }
     }
 }

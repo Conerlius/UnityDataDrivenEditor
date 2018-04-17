@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace DataDriven
 {
@@ -14,5 +15,21 @@ namespace DataDriven
             return DataDrivenTranslator.Translate(content);
         }
 
+        public static BaseAbility Trans(BaseAbility ability, string className)
+        {
+            //UnityEngine.Debug.Log(className);
+            Assembly asm = Assembly.GetExecutingAssembly();
+            if (asm == null)
+            {
+                return null;
+            }
+            //2 UnityEditor 内部类
+            Type cacheServerType = asm.GetType(className);
+
+            //3 创建实例
+            BaseAbility cacheServerPreferencesObj = (BaseAbility)Activator.CreateInstance(cacheServerType);
+            //UnityEngine.Debug.Log(cacheServerPreferencesObj.GetType().ToString());
+            return cacheServerPreferencesObj;
+        }
     }
 }

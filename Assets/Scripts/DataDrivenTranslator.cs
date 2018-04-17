@@ -29,6 +29,12 @@ namespace DataDriven
             {
                 ParseLine(lines[i]);
             }
+            if (baseTranslator == null)
+                return null;
+            object obj = baseTranslator.GetObject();
+            if (obj != null) {
+                return obj as BaseAbility;
+            }
             return null;
         }
         /// <summary>
@@ -52,7 +58,7 @@ namespace DataDriven
                 // 需要丢弃
                 _content = _content.Substring(0, index);
             }
-            TranslateLine(_content);
+            TranslateLine(_content.Replace("\r", ""));
         }
         /// <summary>
         /// 生成每一行的解析器
@@ -66,11 +72,11 @@ namespace DataDriven
             if (keyValue.Length == 1)
             {
                 // 非key-value结构
-                TranslateNonKeyValue(keyValue[0]);
+                TranslateNonKeyValue(keyValue[0].Replace("\"", ""));
             }
             else
             {
-                TranslateKeyValue(keyValue[0], keyValue[1]);
+                TranslateKeyValue(keyValue[0].Replace("\"", ""), keyValue[1].Replace("\"", ""));
             }
         }
         /// <summary>
@@ -81,6 +87,9 @@ namespace DataDriven
         {
             if (baseTranslator == null)
             {
+                // 去掉第一个｛
+                if (content == "{")
+                    return;
                 // 什么都没有的情况下，只记录驱动名称
                 // 除了驱动名称外，第一个应该声明驱动的类型
                 drivenName = content;
