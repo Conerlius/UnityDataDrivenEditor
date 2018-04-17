@@ -28,19 +28,22 @@ namespace DataDriven
             _type = _type.Replace("DataDriven.", "");
             DDConfig.DrivenType dtype = (DDConfig.DrivenType)System.Enum.Parse(typeof(DDConfig.DrivenType), _type);
             int iType = EditorGUILayout.Popup((int)dtype, DDConfig.DrivenTypeName);
-            if (iType != (int)dtype) {
+
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndVertical();
+
+            if (iType != (int)dtype)
+            {
                 // 转换类型，可能会丢失数据
                 if (EditorUtility.DisplayDialog("转换类型", "转换类型可能会引起数据丢失!!确定需要转换?", "确定", "取消"))
                 {
                     dataDrivenEditor.ChangeDrivenTypeTo((DDConfig.DrivenType)iType);
                 }
-                else {
+                else
+                {
                     dataDrivenEditor.ShowNotification(new UnityEngine.GUIContent("取消转换"));
                 }
             }
-
-            EditorGUILayout.EndHorizontal();
-            EditorGUILayout.EndVertical();
         }
     }
 }
