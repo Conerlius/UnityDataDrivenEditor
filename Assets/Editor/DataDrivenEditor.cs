@@ -41,7 +41,7 @@ namespace DataDriven
         /// <summary>
         /// 基本的数据驱动
         /// </summary>
-        private BaseAbility ability = null;
+        private BaseDriven ability = null;
         /// <summary>
         /// 构建编辑器窗口
         /// </summary>

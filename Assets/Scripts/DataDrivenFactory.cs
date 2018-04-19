@@ -10,12 +10,12 @@ namespace DataDriven
         /// </summary>
         /// <param name="content">内容</param>
         /// <returns>驱动</returns>
-        public static BaseAbility ParseConfig(string content)
+        public static BaseDriven ParseConfig(string content)
         {
             return DataDrivenTranslator.Translate(content);
         }
 
-        public static BaseAbility Trans(BaseAbility ability, string className)
+        public static BaseDriven Trans(BaseDriven ability, string className)
         {
             //UnityEngine.Debug.Log(className);
             Assembly asm = Assembly.GetExecutingAssembly();
@@ -27,7 +27,7 @@ namespace DataDriven
             Type cacheServerType = asm.GetType(className);
 
             //3 创建实例
-            BaseAbility cacheServerPreferencesObj = (BaseAbility)Activator.CreateInstance(cacheServerType);
+            BaseDriven cacheServerPreferencesObj = (BaseDriven)Activator.CreateInstance(cacheServerType);
             //UnityEngine.Debug.Log(cacheServerPreferencesObj.GetType().ToString());
             cacheServerPreferencesObj.CopyFrom(ability);
             return cacheServerPreferencesObj;

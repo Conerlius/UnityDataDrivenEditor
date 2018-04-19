@@ -20,7 +20,7 @@ namespace DataDriven
         /// </summary>
         /// <param name="content">内容</param>
         /// <returns>驱动</returns>
-        public static BaseAbility Translate(string content)
+        public static BaseDriven Translate(string content)
         {
             baseTranslator = null;
             string[] lines = content.Split('\n');
@@ -33,7 +33,7 @@ namespace DataDriven
                 return null;
             object obj = baseTranslator.GetObject();
             if (obj != null) {
-                return obj as BaseAbility;
+                return obj as BaseDriven;
             }
             return null;
         }

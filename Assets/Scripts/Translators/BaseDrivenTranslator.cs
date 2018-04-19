@@ -10,10 +10,10 @@ namespace DataDriven
 		/// <summary>
 		/// 驱动
 		/// </summary>
-		BaseAbility ability = null;
+		BaseDriven ability = null;
 		public BaseDrivenTranslator(string aname) {
 			if (ability == null)
-				ability = new BaseAbility();
+				ability = new BaseDriven();
 			ability.Name = aname;
 		}
 

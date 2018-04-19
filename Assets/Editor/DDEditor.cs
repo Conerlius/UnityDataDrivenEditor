@@ -28,7 +28,7 @@ namespace DataDriven
         /// </summary>
         /// <param name="dataDrivenEditor">编辑器</param>
         /// <param name="ability">驱动</param>
-        public static void OnGUI(DataDrivenEditor dataDrivenEditor, BaseAbility ability)
+        public static void OnGUI(DataDrivenEditor dataDrivenEditor, BaseDriven ability)
         {
             EditorGUILayout.BeginVertical();
             // 文件名

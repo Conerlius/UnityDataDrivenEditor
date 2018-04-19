@@ -3,7 +3,7 @@
     /// <summary>
     /// 施法驱动
     /// </summary>
-    public class CastAbility : BaseAbility
+    public class CastAbility : BaseDriven
     {
     }
 }
