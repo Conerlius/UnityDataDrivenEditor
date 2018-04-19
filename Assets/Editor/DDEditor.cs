@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEditor;
+using UnityEngine;
 
 namespace DataDriven
 {
@@ -12,6 +13,8 @@ namespace DataDriven
         /// 展开属性的列表
         /// </summary>
         private static bool extendProperties = false;
+        private static string PropertiesIcon = "Toolbar Plus";
+        private static string PropertiesName = "驱动属性";
         /// <summary>
         /// 展开事件的列表
         /// </summary>
@@ -42,6 +45,20 @@ namespace DataDriven
             int iType = EditorGUILayout.Popup((int)dtype, DDConfig.DrivenTypeName);
             EditorGUILayout.EndHorizontal();
 
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button(EditorGUIUtility.IconContent(PropertiesIcon),GUILayout.Width(20), GUILayout.Height(15))){
+                extendProperties = !extendProperties;
+                if (extendProperties){
+                    PropertiesIcon = "Toolbar Minus";
+                }else{
+                    PropertiesIcon = "Toolbar Plus";
+                }
+            }
+            EditorGUILayout.LabelField(PropertiesName);
+            EditorGUILayout.EndHorizontal();
+            if (extendProperties){
+                
+            }
 
             EditorGUILayout.Space();
             EditorGUILayout.Space();

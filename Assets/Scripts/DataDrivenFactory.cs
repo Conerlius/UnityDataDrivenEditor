@@ -29,6 +29,7 @@ namespace DataDriven
             //3 创建实例
             BaseAbility cacheServerPreferencesObj = (BaseAbility)Activator.CreateInstance(cacheServerType);
             //UnityEngine.Debug.Log(cacheServerPreferencesObj.GetType().ToString());
+            cacheServerPreferencesObj.CopyFrom(ability);
             return cacheServerPreferencesObj;
         }
     }
