@@ -10,11 +10,12 @@
         /// </summary>
         public enum DrivenType : int
         {
-            BaseAbility,    // 基本驱动
+            BaseDriven,    // 基本驱动
             BuildAbility,   // 建筑驱动
             UnitAbility,    // 单位驱动
             CastAbility,    // 施法驱动
             ItemAbility,    // 物品驱动
+            AbilityDriven,  // 技能驱动
         }
         /// <summary>
         /// 驱动中文名
@@ -24,7 +25,8 @@
             "建筑驱动",
             "单位驱动",
             "施法驱动",
-            "物品驱动"
+            "物品驱动",
+            "技能驱动",
         };
     }
 }

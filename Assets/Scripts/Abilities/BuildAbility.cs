@@ -5,5 +5,9 @@
     /// </summary>
     public class BuildAbility : BaseDriven
     {
+        /// <summary>
+        /// 模型
+        /// </summary>
+        public string Model = string.Empty;
     }
 }

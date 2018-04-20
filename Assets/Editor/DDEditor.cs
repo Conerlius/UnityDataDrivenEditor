@@ -24,6 +24,10 @@ namespace DataDriven
         /// </summary>
         private static bool extendModifies = false;
         /// <summary>
+        /// 当前驱动的类型
+        /// </summary>
+        private static DDConfig.DrivenType dtype = DDConfig.DrivenType.BaseDriven;
+        /// <summary>
         /// 展示驱动数据
         /// </summary>
         /// <param name="dataDrivenEditor">编辑器</param>
@@ -31,6 +35,10 @@ namespace DataDriven
         public static void OnGUI(DataDrivenEditor dataDrivenEditor, BaseDriven ability)
         {
             EditorGUILayout.BeginVertical();
+            if (EditorGUILayout.DropdownButton(new UnityEngine.GUIContent("保存"), UnityEngine.FocusType.Keyboard))
+            {
+                dataDrivenEditor.SaveAbility();
+            }
             // 文件名
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("文件名:");
@@ -41,11 +49,12 @@ namespace DataDriven
             EditorGUILayout.LabelField("驱动类型:");
             string _type = ability.GetType().ToString();
             _type = _type.Replace("DataDriven.", "");
-            DDConfig.DrivenType dtype = (DDConfig.DrivenType)System.Enum.Parse(typeof(DDConfig.DrivenType), _type);
+            dtype = (DDConfig.DrivenType)System.Enum.Parse(typeof(DDConfig.DrivenType), _type);
             int iType = EditorGUILayout.Popup((int)dtype, DDConfig.DrivenTypeName);
             EditorGUILayout.EndHorizontal();
 
-            EditorGUILayout.BeginHorizontal();
+            DrawDrivenEditor(ability);
+            /*EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button(EditorGUIUtility.IconContent(PropertiesIcon),GUILayout.Width(20), GUILayout.Height(15))){
                 extendProperties = !extendProperties;
                 if (extendProperties){
@@ -59,13 +68,7 @@ namespace DataDriven
             if (extendProperties){
                 
             }
-
-            EditorGUILayout.Space();
-            EditorGUILayout.Space();
-
-            if (EditorGUILayout.DropdownButton(new UnityEngine.GUIContent("保存"), UnityEngine.FocusType.Keyboard)){
-                dataDrivenEditor.SaveAbility();
-            }
+*/
             EditorGUILayout.EndVertical();
 
             if (iType != (int)dtype)
@@ -79,6 +82,16 @@ namespace DataDriven
                 {
                     dataDrivenEditor.ShowNotification(new UnityEngine.GUIContent("取消转换"));
                 }
+            }
+        }
+        private static void DrawDrivenEditor(BaseDriven ability){
+            switch(dtype){
+                case DDConfig.DrivenType.BuildAbility:{
+                        BuildDrivenEditor.OnGUI(ability);
+                    }
+                    break;
+                default:
+                    break;
             }
         }
     }
