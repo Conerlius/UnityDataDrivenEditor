@@ -8,8 +8,19 @@ namespace DataDriven
     /// <summary>
     /// 建筑驱动
     /// </summary>
-    public static class BuildDrivenEditor
+    public class BuildDrivenEditor : BaseDrivenEditor
     {
+        static BuildDrivenEditor _instance = null;
+        public static BuildDrivenEditor Instance {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new BuildDrivenEditor();
+                }
+                return _instance;
+            }
+        }
         private static string ResPrePath = "Assets/GameAssets/";
         /// <summary>
         /// 模型预览器
@@ -27,7 +38,7 @@ namespace DataDriven
         /// 画驱动属性面板
         /// </summary>
         /// <param name="ability">驱动</param>
-        public static void OnGUI(BaseDriven ability, DataDrivenEditor dataDrivenEditor)
+        public void OnGUI(BaseDriven ability, DataDrivenEditor dataDrivenEditor)
         {
             float WindowHeiht = dataDrivenEditor.position.height;
             float WindowWidth = dataDrivenEditor.position.width;
@@ -71,8 +82,8 @@ namespace DataDriven
         /// <summary>
         /// 保存驱动数据
         /// </summary>
-        /// <param name="ability"></param>
-        public static string GenerateContent(BaseDriven ability)
+        /// <param name="ability">驱动</param>
+        public string GenerateContent(BaseDriven ability)
         {
             BuildDriven buildAbility = ability as BuildDriven;
             StringBuilder sb = new StringBuilder("// This File is auto generated! Don't modify!!!\n");
@@ -82,7 +93,15 @@ namespace DataDriven
             sb.AppendLine(string.Format("\t\"Model\"\t\"{0}\"", buildAbility.Model));
             sb.Append("}");
             return sb.ToString();
+        }
 
+        public void CloseDrawDriven()
+        {
+            if (gameObjectEditor != null)
+            {
+                GameObject.DestroyImmediate(gameObjectEditor);
+                gameObjectEditor = null;
+            }
         }
     }
 }
