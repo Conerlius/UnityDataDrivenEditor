@@ -3,7 +3,7 @@
     /// <summary>
     /// 物品驱动
     /// </summary>
-    public class ItemAbility : BaseDriven
+    public class ItemDriven : BaseDriven
     {
     }
 }

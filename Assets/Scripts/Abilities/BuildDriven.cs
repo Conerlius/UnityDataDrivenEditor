@@ -3,7 +3,7 @@
     /// <summary>
     /// 建筑驱动
     /// </summary>
-    public class BuildAbility : BaseDriven
+    public class BuildDriven : BaseDriven
     {
         /// <summary>
         /// 模型

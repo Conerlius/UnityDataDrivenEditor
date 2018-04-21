@@ -51,6 +51,7 @@ namespace DataDriven
                 _Instance = GetWindow<DataDrivenEditor>();
                 _Instance.titleContent = new GUIContent(WINDOW_TITLE);
                 _Instance.Init();
+                _Instance.minSize = new Vector2(1000, 600);
             }
             // 展示窗口
             _Instance.Show();
@@ -115,6 +116,10 @@ namespace DataDriven
         public string ConfigPath {
             get;set;
         }
+        /// <summary>
+        /// 打开的文件路径
+        /// </summary>
+        public string FilePath { get; set; }
         #endregion
     }
 }

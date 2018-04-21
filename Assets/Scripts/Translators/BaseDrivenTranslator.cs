@@ -10,16 +10,25 @@ namespace DataDriven
 		/// <summary>
 		/// 驱动
 		/// </summary>
-		BaseDriven ability = null;
+		private BaseDriven ability = null;
 		public BaseDrivenTranslator(string aname) {
-			if (ability == null)
-				ability = new BaseDriven();
-			ability.Name = aname;
+            Init(aname);
 		}
 
-        public object GetObject()
+        protected virtual void Init(string aname)
+        {
+            if (ability == null)
+                ability = new BaseDriven();
+            ability.Name = aname;
+        }
+
+        public virtual object GetObject()
         {
             return ability;
+        }
+
+        public virtual void AddKeyValue(string key, string value)
+        {
         }
     }
 }

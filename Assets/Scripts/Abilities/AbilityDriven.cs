@@ -6,5 +6,6 @@ namespace DataDriven
     /// </summary>
     public class AbilityDriven : BaseDriven
     {
+        
     }
 }

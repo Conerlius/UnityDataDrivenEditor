@@ -116,6 +116,7 @@ namespace DataDriven
 					}
                     break;
                 default:
+                    baseTranslator.AddKeyValue(key, value);
                     break;
             }
         }
@@ -127,10 +128,13 @@ namespace DataDriven
 		public static BaseDrivenTranslator CreateDrivenTranslator(string aname) {
 			BaseDrivenTranslator _translator = null;
 			switch (aname) {
-                case DrivenConst.BUILD_ABILITY:
-                    _translator = new BaseDrivenTranslator(drivenName);
+                case DrivenConst.BUILD_DRIVEN:
+                    _translator = new BuildDrivenTranslator(drivenName);
                     break;
-				case DrivenConst.BASE_ABILITY:
+                case DrivenConst.ABILITY_DRIVEN:
+                    _translator = new AbilityDrivenTranslator(drivenName);
+                    break;
+				case DrivenConst.BASE_DRIVEN:
 				default:
 					_translator = new BaseDrivenTranslator(drivenName);
 					break;

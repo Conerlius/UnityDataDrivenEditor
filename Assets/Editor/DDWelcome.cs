@@ -23,6 +23,7 @@ namespace DataDriven
                 string path = EditorUtility.OpenFilePanel("选择您要打开的文件", _editor.ConfigPath, Fliter);
                 if (path != null && path.Length > 0)
                 {
+                    _editor.FilePath = path;
                     string content = File.ReadAllText(path);
                     _editor.ParseContent(content);
                 }
@@ -39,6 +40,7 @@ namespace DataDriven
                 if (path != null && path.Length > 0)
                 {
                     string _p = Application.dataPath.Replace("Assets", "") + path;
+                    _editor.FilePath = _p;
                     string _name = FileUtil.GetFileName(_p);
                     string _content = GenerateDefaultContent(_name);
                     FileUtil.CreateTextFile(_p, _content);
@@ -59,7 +61,7 @@ namespace DataDriven
             StringBuilder sb = new StringBuilder("// This File is auto generated! Don't modify!!!\n");
             sb.AppendFormat("\"{0}\"\n", fileName);
             sb.AppendLine("{");
-            sb.AppendLine(string.Format("\t\"Ability\"\t\"baseAbility\""));
+            sb.AppendLine(string.Format("\t\"Ability\"\t\"basedriven\""));
             sb.Append("}");
             return sb.ToString();
         }

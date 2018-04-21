@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -34,10 +35,14 @@ namespace DataDriven
         /// <param name="ability">驱动</param>
         public static void OnGUI(DataDrivenEditor dataDrivenEditor, BaseDriven ability)
         {
+            string _type = ability.GetType().ToString();
+            _type = _type.Replace("DataDriven.", "");
+            dtype = (DDConfig.DrivenType)System.Enum.Parse(typeof(DDConfig.DrivenType), _type);
+
             EditorGUILayout.BeginVertical();
             if (EditorGUILayout.DropdownButton(new UnityEngine.GUIContent("保存"), UnityEngine.FocusType.Keyboard))
             {
-                dataDrivenEditor.SaveAbility();
+                SaveAbility(dataDrivenEditor, ability);
             }
             // 文件名
             EditorGUILayout.BeginHorizontal();
@@ -47,13 +52,10 @@ namespace DataDriven
             // 驱动类型
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("驱动类型:");
-            string _type = ability.GetType().ToString();
-            _type = _type.Replace("DataDriven.", "");
-            dtype = (DDConfig.DrivenType)System.Enum.Parse(typeof(DDConfig.DrivenType), _type);
             int iType = EditorGUILayout.Popup((int)dtype, DDConfig.DrivenTypeName);
             EditorGUILayout.EndHorizontal();
 
-            DrawDrivenEditor(ability);
+            DrawDrivenEditor(ability, dataDrivenEditor);
             /*EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button(EditorGUIUtility.IconContent(PropertiesIcon),GUILayout.Width(20), GUILayout.Height(15))){
                 extendProperties = !extendProperties;
@@ -84,10 +86,48 @@ namespace DataDriven
                 }
             }
         }
-        private static void DrawDrivenEditor(BaseDriven ability){
-            switch(dtype){
-                case DDConfig.DrivenType.BuildAbility:{
-                        BuildDrivenEditor.OnGUI(ability);
+        /// <summary>
+        /// 保存驱动
+        /// </summary>
+        /// <param name="ability">驱动</param>
+        private static void SaveAbility(DataDrivenEditor dataDrivenEditor, BaseDriven ability)
+        {
+            string content = string.Empty;
+            switch (dtype)
+            {
+                case DDConfig.DrivenType.BuildDriven:
+                    content = BuildDrivenEditor.GenerateContent(ability);
+                    break;
+                case DDConfig.DrivenType.AbilityDriven:
+                    content = AbilityDrivenEditor.GenerateContent(ability);
+                    break;
+                default:
+                    content = DDWelcome.GenerateDefaultContent(ability.Name);
+                    break;
+            }
+            if (File.Exists(dataDrivenEditor.FilePath))
+            {
+                File.Delete(dataDrivenEditor.FilePath);
+            }
+            FileUtil.CreateTextFile(dataDrivenEditor.FilePath, content);
+        }
+        /// <summary>
+        /// 展示驱动的属性
+        /// </summary>
+        /// <param name="ability">驱动</param>
+        /// <param name="dataDrivenEditor">驱动编辑器</param>
+        private static void DrawDrivenEditor(BaseDriven ability, DataDrivenEditor dataDrivenEditor)
+        {
+            switch (dtype)
+            {
+                case DDConfig.DrivenType.BuildDriven:
+                    {
+                        BuildDrivenEditor.OnGUI(ability, dataDrivenEditor);
+                    }
+                    break;
+                case DDConfig.DrivenType.AbilityDriven:
+                    {
+                        AbilityDrivenEditor.OnGUI(ability, dataDrivenEditor);
                     }
                     break;
                 default:
