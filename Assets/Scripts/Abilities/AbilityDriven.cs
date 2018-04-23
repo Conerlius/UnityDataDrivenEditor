@@ -19,28 +19,34 @@ namespace DataDriven
         /// <summary>
         /// 技能事件
         /// </summary>
-        public List<AbilityEvent> events = new List<AbilityEvent>();
+        public Dictionary<string, AbilityEvent> events = new Dictionary<string, AbilityEvent>();
         /// <summary>
         /// 技能修改器
         /// </summary>
-        public List<AbilityModifier> modifiers = new List<AbilityModifier>();
+        public Dictionary<string, AbilityModifier> modifiers = new Dictionary<string, AbilityModifier>();
     }
     /// <summary>
     /// 技能预加载资源
     /// </summary>
-    public class AbilityPrecache {
+    public class AbilityPrecache
+    {
 
     }
     /// <summary>
     /// 技能事件
     /// </summary>
-    public class AbilityEvent {
-
+    public class AbilityEvent
+    {
+        /// <summary>
+        /// 事件名称
+        /// </summary>
+        public string Name = string.Empty;
     }
     /// <summary>
     /// 技能修改器
     /// </summary>
-    public class AbilityModifier {
+    public class AbilityModifier
+    {
 
     }
 }

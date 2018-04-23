@@ -6,6 +6,9 @@ namespace DataDriven
     /// </summary>
     public class AbilityDrivenTranslator : BaseDrivenTranslator
     {
+        /// <summary>
+        /// 技能驱动
+        /// </summary>
         private AbilityDriven ability = null;
         public AbilityDrivenTranslator(string aname) : base(aname)
         {
@@ -21,6 +24,18 @@ namespace DataDriven
         {
             return ability;
         }
+		public override void AddKeyValue(string key, string value)
+		{
+            if (ability == null)
+                return;
+            switch(key){
+                case DrivenPropertyConst.ICON:
+                    ability.Icon = value;
+                    break;
+                default:
+                    break;
+            }
+		}
 
-    }
+	}
 }

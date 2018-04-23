@@ -4,5 +4,6 @@
     {
         public const string ABILITYNAME = "Driven";
         public const string MODELNAME = "Model";
+        public const string ICON = "Icon";
     }
 }
