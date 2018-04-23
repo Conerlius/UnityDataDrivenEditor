@@ -56,11 +56,11 @@ namespace DataDriven
             EditorGUILayout.EndVertical();
         }
 
-        public string GenerateContent(BaseDriven ability)
+        public string GenerateContent(BaseDriven driven)
         {
-            BuildDriven buildAbility = ability as BuildDriven;
+            AbilityDriven abilityDriven = driven as AbilityDriven;
             StringBuilder sb = new StringBuilder("// This File is auto generated! Don't modify!!!\n");
-            sb.AppendFormat("\"{0}\"\n", buildAbility.Name);
+            sb.AppendFormat("\"{0}\"\n", abilityDriven.Name);
             sb.AppendLine("{");
             sb.AppendLine("\t\"Driven\"\t\"abilitydriven\"");
 

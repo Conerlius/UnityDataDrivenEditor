@@ -61,7 +61,7 @@ namespace DataDriven
             StringBuilder sb = new StringBuilder("// This File is auto generated! Don't modify!!!\n");
             sb.AppendFormat("\"{0}\"\n", fileName);
             sb.AppendLine("{");
-            sb.AppendLine(string.Format("\t\"Ability\"\t\"basedriven\""));
+            sb.AppendLine(string.Format("\t\"Driven\"\t\"basedriven\""));
             sb.Append("}");
             return sb.ToString();
         }
