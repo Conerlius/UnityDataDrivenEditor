@@ -1,4 +1,5 @@
 ﻿using UnityEditor;
+using UnityEngine;
 
 namespace DataDriven
 {
@@ -7,15 +8,19 @@ namespace DataDriven
     /// </summary>
     public class AbilityEventWizard : ScriptableWizard
     {
+        private static AbilityDriven _ability = null;
         /// <summary>
         /// 技能事件引导单例
         /// </summary>
-        static AbilityEventWizard _instance = null;
+        private static AbilityEventWizard _instance = null;
+        public DDConfig.AbilityEventName _eventName = DDConfig.AbilityEventName.OnSpellStart;
         /// <summary>
         /// 创建技能事件引导
         /// </summary>
-        public static void CreateAbilityEvent()
+        /// <param name="ability">驱动</param>
+        public static void CreateAbilityEvent(AbilityDriven ability)
         {
+            _ability = ability;
             if (_instance == null)
             {
                 _instance = ScriptableWizard.DisplayWizard<AbilityEventWizard>("创建技能事件", "创建", "取消");
@@ -23,12 +28,27 @@ namespace DataDriven
             _instance.Show();
             _instance.Focus();
         }
+        private void OnGUI()
+        {
+            _eventName = (DDConfig.AbilityEventName)EditorGUILayout.EnumPopup(new GUIContent("事件名称"),  _eventName);
+            if (EditorGUILayout.DropdownButton(new GUIContent("创建"), FocusType.Keyboard)) {
+                OnWizardCreate();
+            }
+        }
         /// <summary>  
         /// 点击Add按钮（即Create按钮）调用  
         /// </summary>
         void OnWizardCreate()
         {
-            onClose();
+            string _name = _eventName.ToString();
+            if (_ability.AddEvent(_name, new AbilityEvent()))
+            {
+                onClose();
+            }
+            else {
+                errorString = "事件已经存在，不可重复添加";
+                isValid = false;
+            }
         }
         /// <summary>  
         /// 点击Remove（即other按钮）调用  
@@ -43,6 +63,7 @@ namespace DataDriven
         void onClose(){
             this.Close();
             _instance = null;
+            _ability = null;
         }
     }
 }

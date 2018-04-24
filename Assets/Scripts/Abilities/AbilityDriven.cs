@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 
 namespace DataDriven
@@ -24,6 +25,19 @@ namespace DataDriven
         /// 技能修改器
         /// </summary>
         public Dictionary<string, AbilityModifier> modifiers = new Dictionary<string, AbilityModifier>();
+        /// <summary>
+        /// 添加技能事件
+        /// </summary>
+        /// <param name="eventName">事件名称</param>
+        /// <param name="abilityEvent">事件</param>
+        /// <returns>是否添加成功</returns>
+        public bool AddEvent(string eventName, AbilityEvent abilityEvent)
+        {
+            if (events.ContainsKey(eventName))
+                return false;
+            events.Add(eventName, abilityEvent);
+            return true;
+        }
     }
     /// <summary>
     /// 技能预加载资源
@@ -37,16 +51,19 @@ namespace DataDriven
     /// </summary>
     public class AbilityEvent
     {
-        /// <summary>
-        /// 事件名称
-        /// </summary>
-        public string Name = string.Empty;
+        public List<AbilityAction> Actions = new List<AbilityAction>();
     }
     /// <summary>
     /// 技能修改器
     /// </summary>
     public class AbilityModifier
     {
+
+    }
+    /// <summary>
+    /// 技能行为
+    /// </summary>
+    public class AbilityAction {
 
     }
 }

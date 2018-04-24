@@ -28,5 +28,12 @@
             "物品驱动",
             "技能驱动",
         };
+        /// <summary>
+        /// 技能事件名称
+        /// </summary>
+        public enum AbilityEventName {
+            OnSpellStart,
+            OnProjecticleHit
+        }
     }
 }

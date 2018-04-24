@@ -100,7 +100,7 @@ namespace DataDriven
             EditorGUI.indentLevel = 0;
             if (EditorGUILayout.DropdownButton(new GUIContent("添加事件"), FocusType.Keyboard))
             {
-                AbilityEventWizard.CreateAbilityEvent();
+                AbilityEventWizard.CreateAbilityEvent(ability);
             }
             #endregion
             EditorGUILayout.EndVertical();
@@ -124,7 +124,7 @@ namespace DataDriven
         /// <returns>事件展示器</returns>
         private AbilityEventEditor GetEventEditor(int index)
         {
-            if (eventsEditors.Count < index)
+            if (eventsEditors.Count <= index)
             {
                 eventsEditors.Add(new AbilityEventEditor());
             }
@@ -174,12 +174,15 @@ namespace DataDriven
         /// </summary>
         private static bool extendEvents = false;
         private static string EventsIcon = "Toolbar Plus";
+        private static List<AbilityActionEditor> actionsEditors = new List<AbilityActionEditor>();
         /// <summary>
         /// 展示
         /// </summary>
         public void Draw()
         {
+            
             EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("", GUILayout.Width(20));
             if (GUILayout.Button(EditorGUIUtility.IconContent(EventsIcon), GUILayout.Width(20), GUILayout.Height(15)))
             {
                 extendEvents = !extendEvents;
@@ -196,9 +199,37 @@ namespace DataDriven
             EditorGUILayout.EndHorizontal();
             if (extendEvents){
                 EditorGUI.indentLevel = 2;
-                string _name = EditorGUILayout.TextField("修改器名称", _event.Name);
+                int _index = 0;
+                foreach (var item in _event.Actions) {
+                    DrawAction(item, _index);
+                    _index++;
+                }
+                EditorGUI.indentLevel = 1;
             }
-            EditorGUI.indentLevel = 1;
+            
+        }
+        /// <summary>
+        /// 展示技能行为数据
+        /// </summary>
+        /// <param name="action">行为</param>
+        /// <param name="index">行为下标</param>
+        private void DrawAction(AbilityAction action, int index) {
+            AbilityActionEditor editor = GetActionEditor(index);
+            editor.SetAction(action);
+            editor.Draw();
+        }
+        /// <summary>
+        /// 获取行为展示器
+        /// </summary>
+        /// <param name="index">Index.</param>
+        /// <returns>行为展示器</returns>
+        private AbilityActionEditor GetActionEditor(int index)
+        {
+            if (actionsEditors.Count <= index)
+            {
+                actionsEditors.Add(new AbilityActionEditor());
+            }
+            return actionsEditors[index];
         }
         /// <summary>
         /// 绑定事件的名称和事件
@@ -209,6 +240,28 @@ namespace DataDriven
         {
             _event = value;
             Name = name;
+        }
+    }
+    /// <summary>
+    /// 技能行为展示器
+    /// </summary>
+    public class AbilityActionEditor
+    {
+        /// <summary>
+        /// 技能行为
+        /// </summary>
+        private AbilityAction _action = null;
+        public void Draw()
+        {
+            
+        }
+        /// <summary>
+        /// 绑定技能行为
+        /// </summary>
+        /// <param name="action">行为</param>
+        public void SetAction(AbilityAction action)
+        {
+            _action = action;
         }
     }
 }
