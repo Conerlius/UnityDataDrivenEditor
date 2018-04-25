@@ -141,14 +141,39 @@ namespace DataDriven
             StringBuilder sb = new StringBuilder("// This File is auto generated! Don't modify!!!\n");
             sb.AppendFormat("\"{0}\"\n", abilityDriven.Name);
             sb.AppendLine("{");
+            // 写入属性
             sb.AppendLine("\t\"Driven\"\t\"abilitydriven\"");
             if (abilityDriven.Icon != string.Empty && abilityDriven.Icon.Length > 0)
             {
                 sb.AppendLine(string.Format("\t\"Icon\"\t\"{0}\"", abilityDriven.Icon));
             }
 
+            // 写入事件
+            WriteAbilityEvent(sb, abilityDriven.events, "\t");
             sb.Append("}");
             return sb.ToString();
+        }
+
+        private void WriteAbilityEvent(StringBuilder sb, Dictionary<string, AbilityEvent> events, string preTag)
+        {
+            foreach (var item in events)
+            {
+                sb.AppendLine(string.Format("{0}\"{1}\"", preTag, item.Key));
+                sb.AppendLine(preTag+"{");
+                // 写入事件行为
+                AbilityEvent ae = item.Value;
+                WriteAbilityAction(sb, ae.Actions, preTag + "\t");
+                
+                sb.AppendLine(preTag+"}");
+            }
+
+        }
+        private void WriteAbilityAction(StringBuilder sb, List<AbilityAction> actions, string preTag)
+        {
+            foreach (var actionItem in actions)
+            {
+
+            }
         }
 
         public void CloseDrawDriven()

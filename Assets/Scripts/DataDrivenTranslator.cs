@@ -96,8 +96,21 @@ namespace DataDriven
             }
             else
             {
-
-
+                if (System.Enum.IsDefined(typeof(DataDrivenConfig.AbilityEventName), content)){
+                    UnityEngine.Debug.Log(content);
+                    DataDrivenConfig.AbilityEventName eventName = (DataDrivenConfig.AbilityEventName)System.Enum.Parse(typeof(DataDrivenConfig.AbilityEventName), content);
+                    TranslateEventValue(eventName);
+                }
+            }
+        }
+        private static void TranslateEventValue(DataDrivenConfig.AbilityEventName eventName) {
+            switch (eventName) {
+                case DataDrivenConfig.AbilityEventName.OnSpellStart:
+                    break;
+                case DataDrivenConfig.AbilityEventName.OnProjecticleHit:
+                    break;
+                default:
+                    break;
             }
         }
         /// <summary>

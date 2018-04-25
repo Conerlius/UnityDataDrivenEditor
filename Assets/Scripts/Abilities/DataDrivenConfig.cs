@@ -3,7 +3,7 @@
     /// <summary>
     /// 驱动编辑器的配置
     /// </summary>
-    public static class DDConfig
+    public class DataDrivenConfig
     {
         /// <summary>
         /// 驱动类型

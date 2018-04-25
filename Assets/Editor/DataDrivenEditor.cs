@@ -99,9 +99,9 @@ namespace DataDriven
         /// 切换驱动类型
         /// </summary>
         /// <param name="iType">目标类型</param>
-        public void ChangeDrivenTypeTo(DDConfig.DrivenType iType)
+        public void ChangeDrivenTypeTo(DataDrivenConfig.DrivenType iType)
         {
-            ability = DataDrivenFactory.Trans(ability, "DataDriven." + System.Enum.GetName(typeof(DDConfig.DrivenType), iType));
+            ability = DataDrivenFactory.Trans(ability, "DataDriven." + System.Enum.GetName(typeof(DataDrivenConfig.DrivenType), iType));
         }
         /// <summary>
         /// 保存现在对驱动的修改

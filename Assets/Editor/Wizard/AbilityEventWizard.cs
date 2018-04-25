@@ -13,7 +13,7 @@ namespace DataDriven
         /// 技能事件引导单例
         /// </summary>
         private static AbilityEventWizard _instance = null;
-        public DDConfig.AbilityEventName _eventName = DDConfig.AbilityEventName.OnSpellStart;
+        public DataDrivenConfig.AbilityEventName _eventName = DataDrivenConfig.AbilityEventName.OnSpellStart;
         /// <summary>
         /// 创建技能事件引导
         /// </summary>
@@ -30,7 +30,7 @@ namespace DataDriven
         }
         private void OnGUI()
         {
-            _eventName = (DDConfig.AbilityEventName)EditorGUILayout.EnumPopup(new GUIContent("事件名称"),  _eventName);
+            _eventName = (DataDrivenConfig.AbilityEventName)EditorGUILayout.EnumPopup(new GUIContent("事件名称"),  _eventName);
             if (EditorGUILayout.DropdownButton(new GUIContent("创建"), FocusType.Keyboard)) {
                 OnWizardCreate();
             }

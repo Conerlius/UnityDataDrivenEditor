@@ -13,7 +13,7 @@ namespace DataDriven
         /// <summary>
         /// 当前驱动的类型
         /// </summary>
-        private static DDConfig.DrivenType dtype = DDConfig.DrivenType.BaseDriven;
+        private static DataDrivenConfig.DrivenType dtype = DataDrivenConfig.DrivenType.BaseDriven;
         /// <summary>
         /// 基本驱动展示器
         /// </summary>
@@ -27,7 +27,7 @@ namespace DataDriven
         {
             string _type = ability.GetType().ToString();
             _type = _type.Replace("DataDriven.", "");
-            dtype = (DDConfig.DrivenType)System.Enum.Parse(typeof(DDConfig.DrivenType), _type);
+            dtype = (DataDrivenConfig.DrivenType)System.Enum.Parse(typeof(DataDrivenConfig.DrivenType), _type);
 
             _editor = SwitchDrawDrivenEditor();
 
@@ -44,7 +44,7 @@ namespace DataDriven
             // 驱动类型
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("驱动类型:");
-            int iType = EditorGUILayout.Popup((int)dtype, DDConfig.DrivenTypeName);
+            int iType = EditorGUILayout.Popup((int)dtype, DataDrivenConfig.DrivenTypeName);
             EditorGUILayout.EndHorizontal();
             if (_editor != null)
                 _editor.OnGUI(ability, dataDrivenEditor);
@@ -59,7 +59,7 @@ namespace DataDriven
                     // 关闭展示
                     if (_editor != null)
                         _editor.CloseDrawDriven();
-                    dataDrivenEditor.ChangeDrivenTypeTo((DDConfig.DrivenType)iType);
+                    dataDrivenEditor.ChangeDrivenTypeTo((DataDrivenConfig.DrivenType)iType);
                 }
                 else
                 {
@@ -93,12 +93,12 @@ namespace DataDriven
             BaseDrivenEditor _ed = null;
             switch (dtype)
             {
-                case DDConfig.DrivenType.BuildDriven:
+                case DataDrivenConfig.DrivenType.BuildDriven:
                     {
                         _ed = BuildDrivenEditor.Instance;
                     }
                     break;
-                case DDConfig.DrivenType.AbilityDriven:
+                case DataDrivenConfig.DrivenType.AbilityDriven:
                     {
                         _ed = AbilityDrivenEditor.Instance;
                     }
