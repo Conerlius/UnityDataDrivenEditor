@@ -51,7 +51,23 @@ namespace DataDriven
     /// </summary>
     public class AbilityEvent
     {
-        public List<AbilityAction> Actions = new List<AbilityAction>();
+        public AbilityEvent(string aname) {
+            Name = aname;
+        }
+        /// <summary>
+        /// 事件名称
+        /// </summary>
+        public string Name { get; private set; }
+        /// <summary>
+        /// 行为
+        /// </summary>
+        public Dictionary<string, AbilityAction> Actions = new Dictionary<string, AbilityAction>();
+        public bool AddAction(AbilityAction action) {
+            if (Actions.ContainsKey(action.Name))
+                return false;
+            Actions.Add(action.Name, action);
+            return true;
+        }
     }
     /// <summary>
     /// 技能修改器
@@ -64,6 +80,14 @@ namespace DataDriven
     /// 技能行为
     /// </summary>
     public class AbilityAction {
+        public AbilityAction(string _name)
+        {
+            Name = _name;
+        }
 
+        /// <summary>
+        /// 行为名称
+        /// </summary>
+        public string Name { get; private set; }
     }
 }

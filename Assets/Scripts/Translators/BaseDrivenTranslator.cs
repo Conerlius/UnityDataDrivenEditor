@@ -30,5 +30,10 @@ namespace DataDriven
         public virtual void AddKeyValue(string key, string value)
         {
         }
+
+        public virtual void AddTranslator(BaseDrivenTranslator baseTranslator)
+        {
+            
+        }
     }
 }

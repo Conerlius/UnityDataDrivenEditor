@@ -36,6 +36,15 @@ namespace DataDriven
                     break;
             }
 		}
+        public override void AddTranslator(BaseDrivenTranslator baseTranslator)
+        {
+            AbilityEventTranslator _event = baseTranslator as AbilityEventTranslator;
+            if (_event != null) {
+                AbilityEvent ae = (AbilityEvent)(_event.GetObject());
+                ability.AddEvent(ae.Name, ae);
+                return;
+            }
+        }
 
-	}
+    }
 }

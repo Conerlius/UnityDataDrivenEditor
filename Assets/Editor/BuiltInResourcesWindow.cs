@@ -40,7 +40,7 @@ public class BuiltInResourcesWindow : EditorWindow
                 {
                     GUILayout.BeginVertical();
                     GUILayout.Label(text[index]);
-                    GUILayout.Button(EditorGUIUtility.IconContent(text[index]), GUILayout.Width(50), GUILayout.Height(30));
+                    GUILayout.Button(EditorGUIUtility.IconContent(text[index].Replace("\r", "")), GUILayout.Width(50), GUILayout.Height(30));
                     GUILayout.EndVertical();
                 }
             }

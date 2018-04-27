@@ -35,5 +35,11 @@
             OnSpellStart,
             OnProjecticleHit
         }
+        public enum AbilityActionName {
+            RunScript,
+            Damage,
+            ApplyModifier,
+            LinearProjectile
+        }
     }
 }

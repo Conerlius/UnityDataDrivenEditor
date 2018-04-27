@@ -13,6 +13,9 @@ namespace DataDriven
         /// 技能事件引导单例
         /// </summary>
         private static AbilityEventWizard _instance = null;
+        /// <summary>
+        /// 事件名称
+        /// </summary>
         public DataDrivenConfig.AbilityEventName _eventName = DataDrivenConfig.AbilityEventName.OnSpellStart;
         /// <summary>
         /// 创建技能事件引导
@@ -41,7 +44,7 @@ namespace DataDriven
         void OnWizardCreate()
         {
             string _name = _eventName.ToString();
-            if (_ability.AddEvent(_name, new AbilityEvent()))
+            if (_ability.AddEvent(_name, new AbilityEvent(_name)))
             {
                 onClose();
             }

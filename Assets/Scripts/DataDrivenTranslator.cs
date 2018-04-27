@@ -16,12 +16,17 @@ namespace DataDriven
         /// </summary>
         static BaseDrivenTranslator baseTranslator = null;
         /// <summary>
+        /// 解析器栈
+        /// </summary>
+        static Stack<BaseDrivenTranslator> translatorStack = new Stack<BaseDrivenTranslator>();
+        /// <summary>
         /// 解析驱动
         /// </summary>
         /// <param name="content">内容</param>
         /// <returns>驱动</returns>
         public static BaseDriven Translate(string content)
         {
+            translatorStack.Clear();
             baseTranslator = null;
             string[] lines = content.Split('\n');
             int length = lines.Length;
@@ -96,8 +101,24 @@ namespace DataDriven
             }
             else
             {
+                if (content == "}")
+                {
+                    // 完成一个解析器的解析
+                    if (translatorStack.Count > 0)
+                    {
+                        // 添加到父节点
+                        BaseDrivenTranslator _base = translatorStack.Pop();
+                        _base.AddTranslator(baseTranslator);
+                        baseTranslator = _base;
+                    }
+                    else
+                    {
+                        // 解析完成
+                        return;
+
+                    }
+                }
                 if (System.Enum.IsDefined(typeof(DataDrivenConfig.AbilityEventName), content)){
-                    UnityEngine.Debug.Log(content);
                     DataDrivenConfig.AbilityEventName eventName = (DataDrivenConfig.AbilityEventName)System.Enum.Parse(typeof(DataDrivenConfig.AbilityEventName), content);
                     TranslateEventValue(eventName);
                 }
@@ -106,6 +127,9 @@ namespace DataDriven
         private static void TranslateEventValue(DataDrivenConfig.AbilityEventName eventName) {
             switch (eventName) {
                 case DataDrivenConfig.AbilityEventName.OnSpellStart:
+                    // 解析驱动对应的驱动
+                    var _baseTranslator = CreateEventTranslator(eventName);
+                    HasCreateNewTranslator(_baseTranslator);
                     break;
                 case DataDrivenConfig.AbilityEventName.OnProjecticleHit:
                     break;
@@ -125,20 +149,33 @@ namespace DataDriven
                 case DrivenPropertyConst.ABILITYNAME:
 					{
 						// 解析驱动对应的驱动
-						baseTranslator = CreateDrivenTranslator(value);
-					}
+						var _baseTranslator = CreateDrivenTranslator(value);
+                        HasCreateNewTranslator(_baseTranslator);
+                    }
                     break;
                 default:
                     baseTranslator.AddKeyValue(key, value);
                     break;
             }
         }
-		/// <summary>
-		/// 生成相应的驱动解析器
-		/// </summary>
-		/// <param name="aname">驱动名</param>
-		/// <returns>解析器</returns>
-		public static BaseDrivenTranslator CreateDrivenTranslator(string aname) {
+        /// <summary>
+        /// 添加解析器
+        /// </summary>
+        /// <param name="_baseTranslator">解析器</param>
+        private static void HasCreateNewTranslator(BaseDrivenTranslator _baseTranslator)
+        {
+            if (baseTranslator != null) {
+                translatorStack.Push(baseTranslator);
+            }
+            baseTranslator = _baseTranslator;
+        }
+
+        /// <summary>
+        /// 生成相应的驱动解析器
+        /// </summary>
+        /// <param name="aname">驱动名</param>
+        /// <returns>解析器</returns>
+        public static BaseDrivenTranslator CreateDrivenTranslator(string aname) {
 			BaseDrivenTranslator _translator = null;
 			switch (aname) {
                 case DrivenConst.BUILD_DRIVEN:
@@ -154,5 +191,15 @@ namespace DataDriven
 			}
 			return _translator;
 		}
+        /// <summary>
+        /// 生成相应的事件解析器
+        /// </summary>
+        /// <param name="eventName">事件名</param>
+        /// <returns>解析器</returns>
+        public static BaseDrivenTranslator CreateEventTranslator(DataDrivenConfig.AbilityEventName eventName) {
+            BaseDrivenTranslator _translator = null;
+            _translator = new AbilityEventTranslator(eventName.ToString());
+            return _translator;
+        }
     }
 }

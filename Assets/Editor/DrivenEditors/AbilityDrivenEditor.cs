@@ -91,11 +91,17 @@ namespace DataDriven
             {
                 EditorGUI.indentLevel = 1;
                 int _index = 0;
+                string deleteEventName = string.Empty;
                 foreach (var item in ability.events)
                 {
-                    DrawEvents(item.Key, item.Value, _index);
+                    if (DrawEvents(item.Key, item.Value, _index))
+                    {
+                        deleteEventName = item.Key;
+                    }
                     _index++;
                 }
+                if (deleteEventName != string.Empty)
+                    ability.events.Remove(deleteEventName);
             }
             EditorGUI.indentLevel = 0;
             if (EditorGUILayout.DropdownButton(new GUIContent("添加事件"), FocusType.Keyboard))
@@ -111,11 +117,14 @@ namespace DataDriven
         /// <param name="name">事件名称</param>
         /// <param name="value">事件</param>
         /// <param name="index">事件下标</param>
-        private void DrawEvents(string name, AbilityEvent value, int index)
+        /// <returns>是否删除</returns>
+        private bool DrawEvents(string name, AbilityEvent value, int index)
         {
             AbilityEventEditor editor = GetEventEditor(index);
             editor.SetEventAndName(value, name);
-            editor.Draw();
+            if (editor.Draw())
+                return true;
+            return false;
         }
         /// <summary>
         /// 获取事件展示器
@@ -153,7 +162,12 @@ namespace DataDriven
             sb.Append("}");
             return sb.ToString();
         }
-
+        /// <summary>
+        /// 写入技能事件
+        /// </summary>
+        /// <param name="sb">字符流</param>
+        /// <param name="events">事件列表</param>
+        /// <param name="preTag">tag</param>
         private void WriteAbilityEvent(StringBuilder sb, Dictionary<string, AbilityEvent> events, string preTag)
         {
             foreach (var item in events)
@@ -168,9 +182,15 @@ namespace DataDriven
             }
 
         }
-        private void WriteAbilityAction(StringBuilder sb, List<AbilityAction> actions, string preTag)
+        /// <summary>
+        /// 写入行为
+        /// </summary>
+        /// <param name="sb">字符流</param>
+        /// <param name="actions">行为列表</param>
+        /// <param name="preTag">tag</param>
+        private void WriteAbilityAction(StringBuilder sb, Dictionary<string, AbilityAction> actions, string preTag)
         {
-            foreach (var actionItem in actions)
+            foreach (var item in actions)
             {
 
             }
@@ -197,15 +217,16 @@ namespace DataDriven
         /// <summary>
         /// 展开事件的列表
         /// </summary>
-        private static bool extendEvents = false;
-        private static string EventsIcon = "Toolbar Plus";
-        private static List<AbilityActionEditor> actionsEditors = new List<AbilityActionEditor>();
+        private bool extendEvents = false;
+        private string EventsIcon = "Toolbar Plus";
+        private List<AbilityActionEditor> actionsEditors = new List<AbilityActionEditor>();
         /// <summary>
         /// 展示
         /// </summary>
-        public void Draw()
+        /// <returns>是否删除</returns>
+        public bool Draw()
         {
-            
+            bool isDelete = false;
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("", GUILayout.Width(20));
             if (GUILayout.Button(EditorGUIUtility.IconContent(EventsIcon), GUILayout.Width(20), GUILayout.Height(15)))
@@ -221,17 +242,27 @@ namespace DataDriven
                 }
             }
             EditorGUILayout.LabelField(Name);
+            if (GUILayout.Button(EditorGUIUtility.IconContent("TreeEditor.Trash"))) {
+                isDelete = true;
+            }
             EditorGUILayout.EndHorizontal();
             if (extendEvents){
                 EditorGUI.indentLevel = 2;
                 int _index = 0;
                 foreach (var item in _event.Actions) {
-                    DrawAction(item, _index);
+                    DrawAction(item.Value, _index);
                     _index++;
                 }
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("", GUILayout.Width(50));
+                if (EditorGUILayout.DropdownButton(new GUIContent("添加行为"), FocusType.Keyboard))
+                {
+                    AbilityActionWizard.CreateAbilityAction(_event);
+                }
+                EditorGUILayout.EndHorizontal();
                 EditorGUI.indentLevel = 1;
             }
-            
+            return isDelete;
         }
         /// <summary>
         /// 展示技能行为数据
