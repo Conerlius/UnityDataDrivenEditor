@@ -66,7 +66,7 @@ namespace DataDriven
 
             if (extendProperties)
             {
-                EditorGUI.indentLevel  = 1;
+                EditorGUI.indentLevel = 1;
                 ability.Icon = EditorGUILayout.TextField("技能图标", ability.Icon);
             }
             EditorGUI.indentLevel = 0;
@@ -173,12 +173,12 @@ namespace DataDriven
             foreach (var item in events)
             {
                 sb.AppendLine(string.Format("{0}\"{1}\"", preTag, item.Key));
-                sb.AppendLine(preTag+"{");
+                sb.AppendLine(preTag + "{");
                 // 写入事件行为
                 AbilityEvent ae = item.Value;
                 WriteAbilityAction(sb, ae.Actions, preTag + "\t");
-                
-                sb.AppendLine(preTag+"}");
+
+                sb.AppendLine(preTag + "}");
             }
 
         }
@@ -246,17 +246,24 @@ namespace DataDriven
                 }
             }
             EditorGUILayout.LabelField(Name);
-            if (GUILayout.Button(EditorGUIUtility.IconContent("TreeEditor.Trash"))) {
+            if (GUILayout.Button(EditorGUIUtility.IconContent("TreeEditor.Trash")))
+            {
                 isDelete = true;
             }
             EditorGUILayout.EndHorizontal();
-            if (extendEvents){
+            if (extendEvents)
+            {
                 EditorGUI.indentLevel = 2;
-                int _index = 0;
-                foreach (var item in _event.Actions) {
-                    DrawAction(item, _index);
-                    _index++;
+                AbilityAction deleteItem = null;
+                for (int _index = 0; _index < _event.Actions.Count; _index++)
+                {
+                    if (DrawAction(_event.Actions[_index], _index))
+                    {
+                        deleteItem = _event.Actions[_index];
+                    }
                 }
+                if (deleteItem != null)
+                    _event.Actions.Remove(deleteItem);
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("", GUILayout.Width(50));
                 if (EditorGUILayout.DropdownButton(new GUIContent("添加行为"), FocusType.Keyboard))
@@ -273,10 +280,12 @@ namespace DataDriven
         /// </summary>
         /// <param name="action">行为</param>
         /// <param name="index">行为下标</param>
-        private void DrawAction(AbilityAction action, int index) {
+        /// <returns>是否删除</returns>
+        private bool DrawAction(AbilityAction action, int index)
+        {
             AbilityActionEditor editor = GetActionEditor(index);
             editor.SetAction(action);
-            editor.Draw();
+            return editor.Draw();
         }
         /// <summary>
         /// 获取行为展示器
