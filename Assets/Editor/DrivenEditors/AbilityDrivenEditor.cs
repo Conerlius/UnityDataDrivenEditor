@@ -39,10 +39,16 @@ namespace DataDriven
         /// 展开modify的列表
         /// </summary>
         private static bool extendModifies = false;
+        private static string ModifiersIcon = "Toolbar Plus";
+        private static string ModifiersName = "修改器";
         /// <summary>
         /// event的编辑器
         /// </summary>
         private List<AbilityEventEditor> eventsEditors = new List<AbilityEventEditor>();
+        /// <summary>
+        /// modifier的编辑器
+        /// </summary>
+        private List<AbilityModifierEditor> modifierEditors = new List<AbilityModifierEditor>();
         public void OnGUI(BaseDriven driven, DataDrivenEditor dataDrivenEditor)
         {
             AbilityDriven ability = driven as AbilityDriven;
@@ -68,8 +74,9 @@ namespace DataDriven
             {
                 EditorGUI.indentLevel = 1;
                 ability.Icon = EditorGUILayout.TextField("技能图标", ability.Icon);
+
+                EditorGUI.indentLevel = 0;
             }
-            EditorGUI.indentLevel = 0;
             #endregion
             #region 事件
             EditorGUILayout.BeginHorizontal();
@@ -102,11 +109,49 @@ namespace DataDriven
                 }
                 if (deleteEventName != string.Empty)
                     ability.events.Remove(deleteEventName);
+                EditorGUI.indentLevel = 0;
             }
-            EditorGUI.indentLevel = 0;
             if (EditorGUILayout.DropdownButton(new GUIContent("添加事件"), FocusType.Keyboard))
             {
                 AbilityEventWizard.CreateAbilityEvent(ability);
+            }
+            #endregion
+            #region 修改器
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button(EditorGUIUtility.IconContent(ModifiersIcon), GUILayout.Width(20), GUILayout.Height(15)))
+            {
+                extendModifies = !extendModifies;
+                if (extendModifies)
+                {
+                    ModifiersIcon = "Toolbar Minus";
+                }
+                else
+                {
+                    ModifiersIcon = "Toolbar Plus";
+                }
+            }
+            EditorGUILayout.LabelField(ModifiersName);
+            EditorGUILayout.EndHorizontal();
+            if (extendModifies)
+            {
+                EditorGUI.indentLevel = 1;
+                int _index = 0;
+                string deletemodifyName = string.Empty;
+                foreach (var item in ability.modifiers)
+                {
+                    if (DrawModifiers(item.Key, item.Value, _index))
+                    {
+                        deletemodifyName = item.Key;
+                    }
+                    _index++;
+                }
+                if (deletemodifyName != string.Empty)
+                    ability.modifiers.Remove(deletemodifyName);
+                EditorGUI.indentLevel = 0;
+            }
+            if (EditorGUILayout.DropdownButton(new GUIContent("添加修改器"), FocusType.Keyboard))
+            {
+                AbilityModifierWizard.CreateAbilityModifier(ability);
             }
             #endregion
             EditorGUILayout.EndVertical();
@@ -138,6 +183,34 @@ namespace DataDriven
                 eventsEditors.Add(new AbilityEventEditor());
             }
             return eventsEditors[index];
+        }
+
+        /// <summary>
+        /// 展示技能修改器
+        /// </summary>
+        /// <param name="name">修改器名称</param>
+        /// <param name="value">修改器</param>
+        /// <param name="index">修改器下标</param>
+        /// <returns>是否删除</returns>
+        private bool DrawModifiers(string name, AbilityModifier value, int index) {
+            AbilityModifierEditor editor = GetModifierEditor(index);
+            editor.SetModifierAndName(value, name);
+            if (editor.Draw())
+                return true;
+            return false;
+        }
+        /// <summary>
+        /// 获取修改器展示器
+        /// </summary>
+        /// <param name="index">Index.</param>
+        /// <returns>修改器展示器</returns>
+        private AbilityModifierEditor GetModifierEditor(int index)
+        {
+            if (modifierEditors.Count <= index)
+            {
+                modifierEditors.Add(new AbilityModifierEditor());
+            }
+            return modifierEditors[index];
         }
         /// <summary>
         /// 生成驱动文本

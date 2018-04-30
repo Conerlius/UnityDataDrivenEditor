@@ -39,6 +39,18 @@ namespace DataDriven
             events.Add(eventName, abilityEvent);
             return true;
         }
+        /// <summary>
+        /// 添加技能修改器
+        /// </summary>
+        /// <param name="modifierName">修改器名称</param>
+        /// <param name="abilityModifier">修改器</param>
+        /// <returns>是否添加成功</returns>
+        public bool AddModifier(string modifierName, AbilityModifier abilityModifier) {
+            if(modifiers.ContainsKey(modifierName))
+                return false;
+            modifiers.Add(modifierName, abilityModifier);
+            return true;
+        }
     }
     /// <summary>
     /// 技能预加载资源
@@ -73,7 +85,15 @@ namespace DataDriven
     /// </summary>
     public class AbilityModifier
     {
+        /// <summary>
+        /// 修改器名称
+        /// </summary>
+        public string Name = string.Empty;
 
+        public AbilityModifier(string modifierName)
+        {
+            this.Name = modifierName;
+        }
     }
     /// <summary>
     /// 技能行为
