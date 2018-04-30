@@ -118,24 +118,53 @@ namespace DataDriven
 
                     }
                 }
-                if (System.Enum.IsDefined(typeof(DataDrivenConfig.AbilityEventName), content)){
+                if (System.Enum.IsDefined(typeof(DataDrivenConfig.AbilityEventName), content))
+                {
+                    // 事件
                     DataDrivenConfig.AbilityEventName eventName = (DataDrivenConfig.AbilityEventName)System.Enum.Parse(typeof(DataDrivenConfig.AbilityEventName), content);
                     TranslateEventValue(eventName);
                 }
+                else if (System.Enum.IsDefined(typeof(DataDrivenConfig.AbilityActionName), content)) {
+                    // 行为
+                    DataDrivenConfig.AbilityActionName actionName = (DataDrivenConfig.AbilityActionName)System.Enum.Parse(typeof(DataDrivenConfig.AbilityActionName), content);
+                    TranslateActionValue(actionName);
+                }
             }
         }
+        /// <summary>
+        /// 解析事件解析器
+        /// </summary>
+        /// <param name="eventName">事件名称</param>
         private static void TranslateEventValue(DataDrivenConfig.AbilityEventName eventName) {
             switch (eventName) {
                 case DataDrivenConfig.AbilityEventName.OnSpellStart:
+                case DataDrivenConfig.AbilityEventName.OnProjecticleHit:
                     // 解析驱动对应的驱动
                     var _baseTranslator = CreateEventTranslator(eventName);
                     HasCreateNewTranslator(_baseTranslator);
                     break;
-                case DataDrivenConfig.AbilityEventName.OnProjecticleHit:
-                    break;
                 default:
                     break;
             }
+        }
+        /// <summary>
+        /// 解析行为解析器
+        /// </summary>
+        /// <param name="actionName">行为名称</param>
+        private static void TranslateActionValue(DataDrivenConfig.AbilityActionName actionName)
+        {
+            AbilityActionTranslator _baseTranslator = null;
+            switch (actionName)
+            {
+                case DataDrivenConfig.AbilityActionName.RunScript:
+                    _baseTranslator = new RunScriptTranslator("");
+                    break;
+                default:
+                    _baseTranslator = new AbilityActionTranslator("");
+                    UnityEngine.Debug.LogError("不应该进入到改代码片段");
+                    break;
+            }
+            HasCreateNewTranslator(_baseTranslator);
         }
         /// <summary>
         /// 解析key-value行数据

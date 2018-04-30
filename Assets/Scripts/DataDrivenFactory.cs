@@ -3,6 +3,9 @@ using System.Reflection;
 
 namespace DataDriven
 {
+    /// <summary>
+    /// driven类型转换,仅在editor使用
+    /// </summary>
     public class DataDrivenFactory
     {
         /// <summary>
@@ -30,6 +33,19 @@ namespace DataDriven
             BaseDriven cacheServerPreferencesObj = (BaseDriven)Activator.CreateInstance(cacheServerType);
             //UnityEngine.Debug.Log(cacheServerPreferencesObj.GetType().ToString());
             cacheServerPreferencesObj.CopyFrom(ability);
+            return cacheServerPreferencesObj;
+        }
+        public static AbilityAction CreateAbilityAction(string className) {
+            Assembly asm = Assembly.GetExecutingAssembly();
+            if (asm == null)
+            {
+                return null;
+            }
+            //2 UnityEditor 内部类
+            Type cacheServerType = asm.GetType(className+"Action");
+
+            //3 创建实例
+            AbilityAction cacheServerPreferencesObj = (AbilityAction)Activator.CreateInstance(cacheServerType);
             return cacheServerPreferencesObj;
         }
     }

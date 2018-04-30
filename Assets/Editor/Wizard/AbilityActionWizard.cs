@@ -32,6 +32,8 @@ namespace DataDriven
         private void OnGUI()
         {
             _actionName = (DataDrivenConfig.AbilityActionName)EditorGUILayout.EnumPopup(new GUIContent("行为名称"), _actionName);
+            int index = (int)_actionName;
+            EditorGUILayout.LabelField(DataDrivenConfig.AbilityActionDes[index]);
             if (EditorGUILayout.DropdownButton(new GUIContent("创建"), FocusType.Keyboard))
             {
                 OnWizardCreate();
@@ -43,7 +45,7 @@ namespace DataDriven
         void OnWizardCreate()
         {
             string _name = _actionName.ToString();
-            if (_event.AddAction(new AbilityAction(_name)))
+            if (_event.AddAction(DataDrivenFactory.CreateAbilityAction("DataDriven."+ _name)))
             {
                 onClose();
             }

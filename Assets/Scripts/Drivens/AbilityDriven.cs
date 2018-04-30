@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace DataDriven
 {
@@ -61,11 +62,9 @@ namespace DataDriven
         /// <summary>
         /// 行为
         /// </summary>
-        public Dictionary<string, AbilityAction> Actions = new Dictionary<string, AbilityAction>();
+        public List<AbilityAction> Actions = new List<AbilityAction>();
         public bool AddAction(AbilityAction action) {
-            if (Actions.ContainsKey(action.Name))
-                return false;
-            Actions.Add(action.Name, action);
+            Actions.Add(action);
             return true;
         }
     }
@@ -80,14 +79,21 @@ namespace DataDriven
     /// 技能行为
     /// </summary>
     public class AbilityAction {
-        public AbilityAction(string _name)
-        {
-            Name = _name;
+        public AbilityAction() {
+            Name = "AbilityAction";
         }
-
         /// <summary>
         /// 行为名称
         /// </summary>
-        public string Name { get; private set; }
+        public string Name { get; set; }
+#if UNITY_EDITOR
+        public virtual void Draw()
+        {
+            
+        }
+        public virtual void WriteDetail(StringBuilder sb, string v)
+        {
+        }
+#endif
     }
 }

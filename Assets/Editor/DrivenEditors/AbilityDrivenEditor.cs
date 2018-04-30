@@ -188,11 +188,15 @@ namespace DataDriven
         /// <param name="sb">字符流</param>
         /// <param name="actions">行为列表</param>
         /// <param name="preTag">tag</param>
-        private void WriteAbilityAction(StringBuilder sb, Dictionary<string, AbilityAction> actions, string preTag)
+        private void WriteAbilityAction(StringBuilder sb, List<AbilityAction> actions, string preTag)
         {
             foreach (var item in actions)
             {
-
+                sb.AppendLine(string.Format("{0}\"{1}\"", preTag, item.Name));
+                sb.AppendLine(preTag + "{");
+                // 写入事件行为
+                item.WriteDetail(sb, preTag + "\t");
+                sb.AppendLine(preTag + "}");
             }
         }
 
@@ -250,7 +254,7 @@ namespace DataDriven
                 EditorGUI.indentLevel = 2;
                 int _index = 0;
                 foreach (var item in _event.Actions) {
-                    DrawAction(item.Value, _index);
+                    DrawAction(item, _index);
                     _index++;
                 }
                 EditorGUILayout.BeginHorizontal();
@@ -304,12 +308,44 @@ namespace DataDriven
     public class AbilityActionEditor
     {
         /// <summary>
+        /// 展开事件的列表
+        /// </summary>
+        private bool extendaction = false;
+        private string actionIcon = "Toolbar Plus";
+        /// <summary>
         /// 技能行为
         /// </summary>
         private AbilityAction _action = null;
-        public void Draw()
+        public bool Draw()
         {
-            
+            bool isDelete = false;
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("", GUILayout.Width(50));
+            if (GUILayout.Button(EditorGUIUtility.IconContent(actionIcon), GUILayout.Width(20), GUILayout.Height(15)))
+            {
+                extendaction = !extendaction;
+                if (extendaction)
+                {
+                    actionIcon = "Toolbar Minus";
+                }
+                else
+                {
+                    actionIcon = "Toolbar Plus";
+                }
+            }
+            EditorGUILayout.LabelField(_action.Name);
+            if (GUILayout.Button(EditorGUIUtility.IconContent("TreeEditor.Trash")))
+            {
+                isDelete = true;
+            }
+            EditorGUILayout.EndHorizontal();
+            if (extendaction)
+            {
+                EditorGUI.indentLevel = 3;
+                _action.Draw();
+                EditorGUI.indentLevel = 1;
+            }
+            return isDelete;
         }
         /// <summary>
         /// 绑定技能行为

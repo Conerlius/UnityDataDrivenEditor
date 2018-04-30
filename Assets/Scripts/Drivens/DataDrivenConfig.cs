@@ -35,11 +35,24 @@
             OnSpellStart,
             OnProjecticleHit
         }
+        /// <summary>
+        /// 技能行为
+        /// </summary>
         public enum AbilityActionName {
             RunScript,
             Damage,
             ApplyModifier,
             LinearProjectile
         }
+        /// <summary>
+        /// 技能行为描述
+        /// </summary>
+        public static string[] AbilityActionDes =
+        {
+            "执行脚本",
+            "对目标造成伤害",
+            "挂载修改器",
+            "生成线性投射物"
+        };
     }
 }
