@@ -19,10 +19,15 @@ namespace DataDriven
             Name = "RunScript";
         }
 #if UNITY_EDITOR
-        public override void Draw()
+        public override void Draw(int tag)
         {
+            UnityEditor.EditorGUILayout.BeginHorizontal();
+            UnityEditor.EditorGUILayout.LabelField("", UnityEngine.GUILayout.Width(20 * tag));
+            UnityEditor.EditorGUILayout.BeginVertical();
             FileName = UnityEditor.EditorGUILayout.TextField("脚本文件名", FileName);
             FunctionName = UnityEditor.EditorGUILayout.TextField("方法名", FunctionName);
+            UnityEditor.EditorGUILayout.EndVertical();
+            UnityEditor.EditorGUILayout.EndHorizontal();
 
         }
         public override void WriteDetail(StringBuilder sb, string pretag)

@@ -232,8 +232,42 @@ namespace DataDriven
 
             // 写入事件
             WriteAbilityEvent(sb, abilityDriven.events, "\t");
+            // 写入修改器
+            WriteAbilityModifiers(sb, abilityDriven.modifiers, "\t");
             sb.Append("}");
             return sb.ToString();
+        }
+        /// <summary>
+        /// 写入所有的修改器
+        /// </summary>
+        /// <param name="sb">字符流</param>
+        /// <param name="modifies">修改器列表</param>
+        /// <param name="preTag">tag</param>
+        private void WriteAbilityModifiers(StringBuilder sb, Dictionary<string, AbilityModifier> modifies, string preTag)
+        {
+            if (modifies.Count == 0) {
+                return;
+            }
+            sb.AppendLine(string.Format("{0}\"modifiers\"\n{1}{{", preTag, preTag));
+            string nTag = preTag + "\t";
+            foreach (var item in modifies)
+            {
+                sb.AppendLine(string.Format("{0}\"{1}\"", nTag, item.Key));
+                sb.AppendLine(string.Format("{0}{{", nTag));
+                WriteAbilityModifier(sb, item.Value, nTag);
+                sb.AppendLine(string.Format("{0}}}", nTag));
+            }
+            sb.AppendLine(string.Format("{0}}}", preTag));
+        }
+        /// <summary>
+        /// 写入技能修改器
+        /// </summary>
+        /// <param name="sb">字符流</param>
+        /// <param name="modifier">修改器</param>
+        /// <param name="preTag">tag</param>
+        private void WriteAbilityModifier(StringBuilder sb, AbilityModifier modifier, string preTag) {
+            // 写入事件
+            WriteAbilityEvent(sb, modifier.events, preTag+"\t");
         }
         /// <summary>
         /// 写入技能事件
@@ -301,11 +335,11 @@ namespace DataDriven
         /// 展示
         /// </summary>
         /// <returns>是否删除</returns>
-        public bool Draw()
+        public bool Draw(int tag = 1)
         {
             bool isDelete = false;
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("", GUILayout.Width(20));
+            EditorGUILayout.LabelField("", GUILayout.Width(20*tag));
             if (GUILayout.Button(EditorGUIUtility.IconContent(EventsIcon), GUILayout.Width(20), GUILayout.Height(15)))
             {
                 extendEvents = !extendEvents;
@@ -326,11 +360,10 @@ namespace DataDriven
             EditorGUILayout.EndHorizontal();
             if (extendEvents)
             {
-                EditorGUI.indentLevel = 2;
                 AbilityAction deleteItem = null;
                 for (int _index = 0; _index < _event.Actions.Count; _index++)
                 {
-                    if (DrawAction(_event.Actions[_index], _index))
+                    if (DrawAction(_event.Actions[_index], _index, tag+1))
                     {
                         deleteItem = _event.Actions[_index];
                     }
@@ -344,7 +377,6 @@ namespace DataDriven
                     AbilityActionWizard.CreateAbilityAction(_event);
                 }
                 EditorGUILayout.EndHorizontal();
-                EditorGUI.indentLevel = 1;
             }
             return isDelete;
         }
@@ -354,11 +386,11 @@ namespace DataDriven
         /// <param name="action">行为</param>
         /// <param name="index">行为下标</param>
         /// <returns>是否删除</returns>
-        private bool DrawAction(AbilityAction action, int index)
+        private bool DrawAction(AbilityAction action, int index, int tag)
         {
             AbilityActionEditor editor = GetActionEditor(index);
             editor.SetAction(action);
-            return editor.Draw();
+            return editor.Draw(tag);
         }
         /// <summary>
         /// 获取行为展示器
@@ -398,11 +430,11 @@ namespace DataDriven
         /// 技能行为
         /// </summary>
         private AbilityAction _action = null;
-        public bool Draw()
+        public bool Draw(int tag)
         {
             bool isDelete = false;
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("", GUILayout.Width(50));
+            EditorGUILayout.LabelField("", GUILayout.Width(20 * tag));
             if (GUILayout.Button(EditorGUIUtility.IconContent(actionIcon), GUILayout.Width(20), GUILayout.Height(15)))
             {
                 extendaction = !extendaction;
@@ -423,9 +455,7 @@ namespace DataDriven
             EditorGUILayout.EndHorizontal();
             if (extendaction)
             {
-                EditorGUI.indentLevel = 3;
-                _action.Draw();
-                EditorGUI.indentLevel = 1;
+                _action.Draw(tag);
             }
             return isDelete;
         }

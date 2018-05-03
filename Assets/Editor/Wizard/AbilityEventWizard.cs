@@ -9,6 +9,7 @@ namespace DataDriven
     public class AbilityEventWizard : ScriptableWizard
     {
         private static AbilityDriven _ability = null;
+        private static AbilityModifier _modifier = null;
         /// <summary>
         /// 技能事件引导单例
         /// </summary>
@@ -31,6 +32,16 @@ namespace DataDriven
             _instance.Show();
             _instance.Focus();
         }
+        public static void CreateAbilityEvent(AbilityModifier ability)
+        {
+            _modifier = ability;
+            if (_instance == null)
+            {
+                _instance = ScriptableWizard.DisplayWizard<AbilityEventWizard>("创建技能事件", "创建", "取消");
+            }
+            _instance.Show();
+            _instance.Focus();
+        }
         private void OnGUI()
         {
             _eventName = (DataDrivenConfig.AbilityEventName)EditorGUILayout.EnumPopup(new GUIContent("事件名称"),  _eventName);
@@ -44,13 +55,14 @@ namespace DataDriven
         void OnWizardCreate()
         {
             string _name = _eventName.ToString();
-            if (_ability.AddEvent(_name, new AbilityEvent(_name)))
+            if ( _ability!= null && _ability.AddEvent(_name, new AbilityEvent(_name)))
             {
                 onClose();
+                return;
             }
-            else {
-                errorString = "事件已经存在，不可重复添加";
-                isValid = false;
+            if (_modifier != null && _modifier.AddEvent(_name, new AbilityEvent(_name)))
+            {
+                onClose();
             }
         }
         /// <summary>  

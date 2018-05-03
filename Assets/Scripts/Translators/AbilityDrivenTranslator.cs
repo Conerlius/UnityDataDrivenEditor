@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace DataDriven
 {
     /// <summary>
@@ -43,6 +45,11 @@ namespace DataDriven
                 AbilityEvent ae = (AbilityEvent)(_event.GetObject());
                 ability.AddEvent(ae.Name, ae);
                 return;
+            }
+            AbilityModifiersTranslator _modifies = baseTranslator as AbilityModifiersTranslator;
+            if (_modifies != null) {
+                Dictionary<string, AbilityModifier> ae = (Dictionary<string, AbilityModifier>)(_modifies.GetObject());
+                ability.AddModifiers(ae);
             }
         }
 

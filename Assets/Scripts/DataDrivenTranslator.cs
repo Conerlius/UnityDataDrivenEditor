@@ -110,6 +110,7 @@ namespace DataDriven
                         BaseDrivenTranslator _base = translatorStack.Pop();
                         _base.AddTranslator(baseTranslator);
                         baseTranslator = _base;
+                        return;
                     }
                     else
                     {
@@ -118,16 +119,31 @@ namespace DataDriven
 
                     }
                 }
+                // 去掉第一个｛
+                if (content == "{")
+                    return;
                 if (System.Enum.IsDefined(typeof(DataDrivenConfig.AbilityEventName), content))
                 {
                     // 事件
                     DataDrivenConfig.AbilityEventName eventName = (DataDrivenConfig.AbilityEventName)System.Enum.Parse(typeof(DataDrivenConfig.AbilityEventName), content);
                     TranslateEventValue(eventName);
                 }
-                else if (System.Enum.IsDefined(typeof(DataDrivenConfig.AbilityActionName), content)) {
+                else if (System.Enum.IsDefined(typeof(DataDrivenConfig.AbilityActionName), content))
+                {
                     // 行为
                     DataDrivenConfig.AbilityActionName actionName = (DataDrivenConfig.AbilityActionName)System.Enum.Parse(typeof(DataDrivenConfig.AbilityActionName), content);
                     TranslateActionValue(actionName);
+                }
+                else if (content == "modifiers")
+                {
+                    // 修改器
+                    var _baseTranslator = new AbilityModifiersTranslator(content);
+                    HasCreateNewTranslator(_baseTranslator);
+                }
+                else if (baseTranslator is AbilityModifiersTranslator) {
+                    // 子修改器
+                    var _baseTranslator = new AbilityModifierTranslator(content);
+                    HasCreateNewTranslator(_baseTranslator);
                 }
             }
         }

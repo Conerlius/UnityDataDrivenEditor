@@ -51,6 +51,16 @@ namespace DataDriven
             modifiers.Add(modifierName, abilityModifier);
             return true;
         }
+        /// <summary>
+        /// 批量添加修改器
+        /// </summary>
+        /// <param name="modifies">批量修改器</param>
+        public void AddModifiers(Dictionary<string, AbilityModifier> modifies)
+        {
+            foreach (var item in modifies) {
+                modifiers.Add(item.Key, item.Value);
+            }
+        }
     }
     /// <summary>
     /// 技能预加载资源
@@ -89,10 +99,22 @@ namespace DataDriven
         /// 修改器名称
         /// </summary>
         public string Name = string.Empty;
+        /// <summary>
+        /// 技能事件
+        /// </summary>
+        public Dictionary<string, AbilityEvent> events = new Dictionary<string, AbilityEvent>();
 
         public AbilityModifier(string modifierName)
         {
             this.Name = modifierName;
+        }
+
+        public bool AddEvent(string _name, AbilityEvent abilityEvent)
+        {
+            if (events.ContainsKey(_name))
+                return false;
+            events.Add(_name, abilityEvent);
+            return true;
         }
     }
     /// <summary>
@@ -107,7 +129,7 @@ namespace DataDriven
         /// </summary>
         public string Name { get; set; }
 #if UNITY_EDITOR
-        public virtual void Draw()
+        public virtual void Draw(int tag)
         {
             
         }
